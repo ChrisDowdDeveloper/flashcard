@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useHistory } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { readDeck } from "../utils/api/index";
 
 
@@ -18,7 +18,7 @@ export default function Study() {
       setCards(response.cards)
     }
     getCard(deckId);
-  }, []);
+  }, [deckId]);
 
   //Gets the next card in the deck and asks (and resets) if they would like to restudy that deck
   function getNextCard() {

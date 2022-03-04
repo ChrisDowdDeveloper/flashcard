@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { readDeck, createCard } from "../utils/api/index"
+import CardLayout from "./CardLayout";
 
 
 
@@ -16,6 +17,18 @@ function CardCreate() {
     //sets card as a blank object
     const [card, setCard] = useState({ ...initialCard });
 
+    //reads the deck with the specific deck Id and sets the deck state to the info.
+    useEffect(() => {
+        const ac = new AbortController();
+        async function loadData() {
+            const dataFromAPI = await readDeck(deckId, ac.signal);
+            setDeck(dataFromAPI);
+        }
+        loadData();
+        return () => ac.abort();
+    }, [deckId]);
+
+
     //changes the front of the flip card
     function frontChange(event) {
         setCard({ ...card, front: event.target.value })
@@ -26,25 +39,13 @@ function CardCreate() {
         setCard({ ...card, back: event.target.value })
     }
 
-    //reads the deck with the specific deck Id and sets the deck state to the info.
-    useEffect(() => {
-        async function loadData() {
-            const dataFromAPI = await readDeck(deckId);
-            setDeck(dataFromAPI);
-        }
-        loadData();
-    }, [deckId]);
-
     //submits the form and redirects to View Deck
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        async function updateData() {
-            await createCard(deckId, card);
-            setCard(initialCard);
-            history.push(`/decks/${deckId}`)
-        }
-        updateData();
-    };
+    function handleSubmit(event) {
+        event.preventDefault()
+        createCard(deckId, card)
+        setCard(initialCard)
+        history.push(`/decks/${deckId}`)
+    }
     if (deck) {
         return (
             <div>
@@ -57,40 +58,13 @@ function CardCreate() {
                 </nav>
                 <br />
                 <h2>{deck.name}: Add Card</h2>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="front">
-                        Front
-                        <textarea
-                            type="text"
-                            name="front"
-                            id="front"
-                            value={card.front}
-                            onChange={(event) => frontChange(event)}
-                        />
-                    </label>
-                    <br />
-                    <label htmlFor="back">
-                        Back
-                        <textarea
-                            type="text"
-                            name="back"
-                            id="back"
-                            value={card.back}
-                            onChange={(event) => backChange(event)}
-                        />
-                    </label>
-                    <br />
-                    <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => history.push(`/decks/${deckId}`)}
-                    >
-                        Cancel
-                    </button>
-                    <button type="submit" className="btn btn-primary">
-                        Save
-                    </button>
-                </form>
+                <CardLayout
+                    frontChange={frontChange}
+                    backChange={backChange}
+                    handleSubmit={handleSubmit}
+                    card={card}
+                    deckId={deckId}
+                />
             </div>
         );
     } else {

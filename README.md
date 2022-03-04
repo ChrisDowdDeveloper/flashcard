@@ -1,3 +1,1 @@
-# flashcard
-
-Designed to help students study the material they are learning. Giving them the ability to create, delete, edit and study a deck on a topic and add, delete, edit the cards. The cards are designed to have the question on the front and the answer on the back. 
+This project is to help students study with flashcards. With the ability to add, view, edit and delete a deck aswell as add, view, delete and edit flashcards. 

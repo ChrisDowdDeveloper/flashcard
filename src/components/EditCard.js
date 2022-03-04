@@ -1,6 +1,7 @@
 import { readCard, updateCard, readDeck } from "../utils/api";
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import CardLayout from "./CardLayout";
 
 export default function EditCard() {
     const { deckId, cardId } = useParams();
@@ -58,40 +59,13 @@ export default function EditCard() {
                 </ol>
             </nav>
             <h2>Edit Card </h2>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="front">
-                    Front
-                    <textarea
-                        type="text"
-                        name="front"
-                        id="front"
-                        value={card.front}
-                        onChange={(event) => frontChange(event)}
-                    />
-                </label>
-                <br />
-                <label htmlFor="back">
-                    Back
-                    <textarea
-                        type="text"
-                        name="back"
-                        id="back"
-                        value={card.back}
-                        onChange={(event) => backChange(event)}
-                    />
-                </label>
-                <br />
-                <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => history.push(`/decks/${deckId}`)}
-                >
-                    Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">
-                    Save
-                </button>
-            </form>
+            <CardLayout
+                handleSubmit={handleSubmit}
+                card={card}
+                frontChange={frontChange}
+                backChange={backChange}
+                deckId={deckId}
+            />
         </div>
     );
 }
