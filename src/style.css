@@ -1,0 +1,8 @@
+.card-body-top {
+    display: flex;
+    flex-direction: row;
+}
+
+ul li {
+    list-style-type: none;
+}
